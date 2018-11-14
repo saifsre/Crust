@@ -9,7 +9,7 @@ import {
     Col
 } from 'reactstrap';
 
-class Buttons extends React.Component {
+class Distributor extends React.Component {
 
     // For Checkboxes & Radio Buttons
     constructor (props) {
@@ -21,6 +21,6 @@ class Buttons extends React.Component {
     }
 }
 
-export default Buttons;
+export default Distributor;
 
 
