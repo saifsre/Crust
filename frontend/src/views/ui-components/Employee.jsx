@@ -8,14 +8,14 @@ import {
     Row,
     Col
 } from 'reactstrap';
-class Badges extends React.Component {
+class Employee extends React.Component {
 
     render() {
       return <div>
-                 </div>
+             </div>
     }
 }
 
-export default Badges;
+export default Employee;
 
 

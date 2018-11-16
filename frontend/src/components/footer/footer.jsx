@@ -5,7 +5,7 @@ class Footer extends React.Component {
   render() {
     return (
       <footer className="footer text-center">
-        All Rights Reserved by Crust admin. Designed and Developed by{'Saif, Eric L, Eric N, William '}
+        All Rights Reserved by Crust admin. Designed and Developed by {' Saif, Eric L, Eric N, William '}
       </footer>
     );
   }
