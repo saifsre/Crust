@@ -18,6 +18,7 @@
     "pug": "2.0.0-beta11"
   },
   "devDependencies": {
+    "moment": "^2.22.2",
     "number-generator": "^2.2.5",
     "uuidjs": "^4.0.3"
   }

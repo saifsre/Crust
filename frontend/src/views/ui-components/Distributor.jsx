@@ -26,59 +26,52 @@ class Buttons extends React.Component {
           they order */
           IngredientBestByInfo:[{
             iName: "Mustard",
-            shipped_date: "123",
+            ship_date: "123",
             bb_date: '11',},
             {
               iName: "Mustard",
-              shipped_date: "234",
+              ship_date: "234",
               bb_date: '11',},
               {
                 iName: "Mustard",
-                shipped_date: "123",
+                ship_date: "123",
                 bb_date: '11',},
                 {
                   iName: "Mustard",
-                  shipped_date: "123",
+                  ship_date: "123",
                   bb_date: '11',},
                   {
                     iName: "Mustard",
-                    shipped_date: "123",
+                    ship_date: "123",
                     bb_date: '11',}],
 
-          IngredientProducerInfo:[{
-            did: 123,
-            prodid: 200,
-            address:"West 8th 12",
-            phone:123456792
-          },
-          {
-            did: 456,
-            prodid: 400,
-            address:"Meep Avenue",
-            phone:68371939
-          }],
+          IngredientProducerInfo: null,
           date: new Date()
       };
 
     }
 
-
-
-    componentDidMount(){
-      //this.setState();
+    componentDidMount() {
     }
-
-    checkBestByIngredients(){
-      alert(this.state.date)
-      // this.state.date is accessible from here and gives the date clicked on the Calendar
-      // Use this data to store the right data onto the state
-      this.setState({btnClicked: !this.state.btnClicked})
+    checkBestByIngredients(){ 
+      let shipdate = moment(this.state.date).format("YYYY-MM-DD");
+      alert(shipdate);
+      fetch("http://localhost:3000/supply/ingredient/" + shipdate).then(res=>res.json()).then(res => {
+          console.log(res);
+          this.setState({IngredientBestByInfo: res, btnClicked: true})
+          })
     }
 
     displayIngredientProducerData(){
-      this.setState({prodButton: !this.state.prodButton})
+        let prodId = this.refs.prodID.value;
+        let url = "http://localhost:3000/supply/ingredientproducer/" + prodId;
+        fetch(url).then(res=>res.json()).then(res => {
+            console.log(res);
+            this.setState({IngredientProducerInfo: res, prodButton: !this.state.prodButton})
+            }).catch(e=>{
+                alert("Please enter a valid Producer ID");
+            });
     }
-
     onChange = date => this.setState({date})
 
     render() {
@@ -97,7 +90,7 @@ class Buttons extends React.Component {
             {this.state.IngredientBestByInfo.map(function(ingredient,i){
                   return   <tr>
                   <td> <strong>{ingredient.iName}</strong></td>
-                  <td> <strong>{ingredient.shipped_date}</strong></td>
+                  <td> <strong>{ingredient.ship_date}</strong></td>
                   <td> <strong>{ingredient.bb_date}</strong></td>
             </tr>
           })}
@@ -109,7 +102,6 @@ class Buttons extends React.Component {
         //This tuple would be the original ingredient producer obtained from an inputted id.
         //For this particular function, at any point you will ony need to have 1 ingredient producer tuple
         //No need to iterate through the list of objects.
-        alert(this.refs.prodID.value)
         producerTable=  <Table borderless>
               <thead>
                 <tr>
@@ -153,7 +145,7 @@ class Buttons extends React.Component {
                 </div>
 
                 <Button onClick ={this.displayIngredientProducerData.bind(this)}>
-                Check Best By Dates of Ingredients Shipped at this date (Enter ID)
+                Enter the Ingredient Producer ID
                 </Button>
 
                 </CardBody>

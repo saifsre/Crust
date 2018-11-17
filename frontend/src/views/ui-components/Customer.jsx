@@ -134,6 +134,8 @@ console.log(res);
     componentDidMount() {
         fetch("http://localhost:3000/order/sandwiches/all").then(res=>res.json()).then(res => {
             this.setState({sandwiches:res});
+        }).catch(e=>{
+            console.log(e);
         })
     }
     handleChange = (selectedOption) => {
