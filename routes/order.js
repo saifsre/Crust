@@ -65,36 +65,10 @@ router.post('/sandwich/make', function(req, res, next) {
 });
 
 router.put('/update', function(req, res, next) {
-    var restQuery = " ";
     var body = req.body;
-    let count = 0;
-    for(let k in body){
-        console.log(k);
-        if(k=="customerid") {
-            restQuery = restQuery + "customerid = " + body["customerid"];
-        }
-        if(k=="EmpId") {
-            restQuery = restQuery + "EmpId = " + body["EmpId"];
-        }
-        if(k=="PaymentMethod") {
-            restQuery = restQuery + "PaymentMethod = " + body["PaymentMethod"];
-        }
-        if(k=="TimeStamp") {
-            restQuery = restQuery + "TimeStamp = " + body["TimeStamp"];
-        }
-        if(k=="Price") {
-            restQuery = restQuery + "Price = " + body["Price"];
-        }
-        if(k == "sName") {
-            restQuery = restQuery + "sName = " + body["sName"];
-        }
-        count++
-        if(count!=Object.keys(body).length) {
-            restQuery = restQuery + ", "
-        }
-    }
-    var query = "UPDATE `Order` set" + restQuery; 
-    db.query(query, function(err,result) {
+    var query = "UPDATE `Order` set sName = ?, Price = ? where oid = ?"
+    var parameters = [body["sName"], body["Price"], body["orderId"]];
+    db.query(query, parameters,function(err,result) {
         if(err) res.send(err);
         res.send(result); 
     });

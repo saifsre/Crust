@@ -15,9 +15,10 @@ import {
 
 let btnStyle = {
     marginTop: '10px'
-}   
+}    
 
 const RenderSandwiches = (props) => {
+    console.log(props);
    let sNames = [];
    let btnStyle = {
     marginTop: '10px'
@@ -31,7 +32,7 @@ const RenderSandwiches = (props) => {
     onChange={props.handleChange}
     options={sNames}
   />    
-    <Button disabled = {!props.selectedOption} style = {btnStyle} onClick = {()=>props.proceed("pay")}> Next </Button>
+    <Button disabled = {!props.selectedOption} style = {btnStyle} onClick = {()=>props.proceed(props.screen)}> {props.btnText} </Button>
   </div>
 }
 const RenderPayment = (props) => {
@@ -44,13 +45,23 @@ const RenderPayment = (props) => {
   <Button style = {btnStyle} onClick = {()=>props.proceed("confirm")}> Next </Button>
 </div>
 }
+
 const RenderConfirm = (props) => {
     let toDisplay = null;
+    let updateOrder = null;
+    if(props.update) {
+        updateOrder = <RenderSandwiches btnText = "Update Your Order Here!" screen = "pay" proceed = {props.update.bind(this)} handleChange = {props.handleChange.bind(this)} sandwiches = {props.sandwiches} selectedOption = {props.selectedOption}/>
+    }
     if(props.success === true) {
         toDisplay =   
+        <div>
         <Jumbotron>  
-        <h1 className="display-3">Your Order has been placed!</h1>
-      </Jumbotron> 
+        <h1 className="display-3">Your Order has been {props.msg}!</h1>
+        <p className="lead">Your order Id is: {props.id}</p>
+        {updateOrder}
+      </Jumbotron>
+      <Button onClick = {props.cancel}> Click here to Cancel your Order </Button>
+       </div>
     }
     else {
         toDisplay = <Jumbotron>
@@ -75,7 +86,7 @@ class Customer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {elm: "sand", sandwiches: [], selectedOption: null,
-        paymentMethod: null, submitSuccess: null, orderId: null
+        paymentMethod: null, submitSuccess: null, orderId: null, update: false, msg: "placed"
     }
     }
     placeOrder() {
@@ -89,14 +100,31 @@ class Customer extends React.Component {
         Price: this.state.selectedOption.price,
         sName: this.state.selectedOption.value,
   })
-}).then((res)=>{
+}).then(res=>res.json()).then(res => {
     console.log(res);
-    if(res.status ==200) {
-        this.setState({submitSuccess: true})
+    if(res.id) {
+        this.setState({submitSuccess: true, orderId:res.id })
     }
     else {
         this.setState({submitSuccess: false})
     }
+})
+}
+updateOrder() {
+    console.log("Updated: " + this.state.orderId);
+    
+    fetch('http://localhost:3000/order/update', {
+    method: 'PUT',
+    headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+},body: JSON.stringify({
+    sName: this.state.selectedOption.value,
+    Price: this.state.selectedOption.price,
+    orderId: this.state.orderId
+})
+}).then(res=>res.json()).then(res => {
+console.log(res);
 })
 }
     setCrumb(b) {
@@ -116,16 +144,31 @@ class Customer extends React.Component {
         console.log(e.target.value);
         this.setState({paymentMethod:e.target.value})
     }
+    updateUpdate = () => {
+        this.setState({update: true, msg: "updated"})
+        console.log(this.state.update)
+    }
+    cancelOrder = () => {
+        fetch('http://localhost:3000/order/cancel/' + this.state.orderId.toString(), {
+            method: 'DELETE',
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }}).then(res=>res.json()).then(res => {
+            alert("Your Order has been Canceled. Please reorder!")
+            this.setCrumb("sand")
+        })
+    }
     render() {
         let currentView; 
         if(this.state.elm == "sand"){
-            currentView = <RenderSandwiches proceed = {this.setCrumb.bind(this)} sandwiches = {this.state.sandwiches} selectedOption = {this.state.selectedOption} handleChange = {this.handleChange.bind(this)}/>;
+            currentView = <RenderSandwiches btnText = "Next" screen = "pay" proceed = {this.setCrumb.bind(this)} sandwiches = {this.state.sandwiches} selectedOption = {this.state.selectedOption} handleChange = {this.handleChange.bind(this)}/>;
         }
         else if(this.state.elm == "pay") {
             currentView = <RenderPayment proceed = {this.setCrumb.bind(this)} method = {this.state.paymentMethod} updateMethod = {this.updateInput.bind(this)}/>;
         }
         else if(this.state.elm == "confirm") {
-            currentView = <RenderConfirm proceed = {this.placeOrder.bind(this)} sName = {this.state.selectedOption.value} pType = {this.state.paymentMethod} price = {this.state.selectedOption.price} success = {this.state.submitSuccess}/>;
+            currentView = <RenderConfirm msg = {this.state.msg} cancel = {this.cancelOrder.bind(this)}update = {this.state.update} uUpdate = {this.updateUpdate.bind(this)} handleChange = {this.handleChange.bind(this)} selectedOption = {this.state.selectedOption} sandwiches = {this.state.sandwiches} method = {this.state.paymentMethod} updateMethod = {this.updateInput.bind(this)} id = {this.state.orderId} update = {this.updateOrder.bind(this)} proceed = {this.placeOrder.bind(this)} sName = {this.state.selectedOption.value} pType = {this.state.paymentMethod} price = {this.state.selectedOption.price} success = {this.state.submitSuccess}/>;
 
         }
       return <div>
