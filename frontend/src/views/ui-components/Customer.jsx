@@ -90,7 +90,7 @@ class Customer extends React.Component {
     }
     }
     placeOrder() {
-        fetch('http://localhost:3000/order/place', {
+        fetch('http://localhost:5000/order/place', {
         method: 'POST',
         headers: {
         'Accept': 'application/json',
@@ -113,7 +113,7 @@ class Customer extends React.Component {
 updateOrder() {
     console.log("Updated: " + this.state.orderId);
     
-    fetch('http://localhost:3000/order/update', {
+    fetch('http://localhost:5000/order/update', {
     method: 'PUT',
     headers: {
     'Accept': 'application/json',
@@ -132,7 +132,7 @@ updateOrder() {
         this.setState({elm: b,submitSuccess:null})
     }
     componentDidMount() {
-        fetch("http://localhost:3000/order/sandwiches/all").then(res=>res.json()).then(res => {
+        fetch("http://localhost:5000/order/sandwiches/all").then(res=>res.json()).then(res => {
             this.setState({sandwiches:res});
         }).catch(e=>{
             console.log(e);
@@ -150,7 +150,7 @@ updateOrder() {
         this.setState({update: true, msg: "updated"})
     }
     cancelOrder = () => {
-        fetch('http://localhost:3000/order/cancel/' + this.state.orderId.toString(), {
+        fetch('http://localhost:5000/order/cancel/' + this.state.orderId.toString(), {
             method: 'DELETE',
             headers: {
             'Accept': 'application/json',

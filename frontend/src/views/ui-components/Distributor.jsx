@@ -56,7 +56,7 @@ class Buttons extends React.Component {
     checkBestByIngredients(){ 
       let shipdate = moment(this.state.date).format("YYYY-MM-DD");
       alert(shipdate);
-      fetch("http://localhost:3000/supply/ingredient/" + shipdate).then(res=>res.json()).then(res => {
+      fetch("http://localhost:5000/supply/ingredient/" + shipdate).then(res=>res.json()).then(res => {
           console.log(res);
           this.setState({IngredientBestByInfo: res, btnClicked: true})
           })
@@ -64,7 +64,7 @@ class Buttons extends React.Component {
 
     displayIngredientProducerData(){
         let prodId = this.refs.prodID.value;
-        let url = "http://localhost:3000/supply/ingredientproducer/" + prodId;
+        let url = "http://localhost:5000/supply/ingredientproducer/" + prodId;
         fetch(url).then(res=>res.json()).then(res => {
             console.log(res);
             this.setState({IngredientProducerInfo: res, prodButton: !this.state.prodButton})

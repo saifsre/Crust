@@ -138,7 +138,7 @@ class Employee extends React.Component {
     }
     }
     placeOrder() {
-        fetch('http://localhost:3000/order/place', {
+        fetch('http://localhost:5000/order/place', {
         method: 'POST',
         headers: {
         'Accept': 'application/json',
@@ -163,7 +163,7 @@ class Employee extends React.Component {
         this.setState({elm: b,submitSuccess:null})
     }
       componentDidMount() {
-        fetch("http://localhost:3000/order/sandwiches/all").then(res=>res.json()).then(res => {
+        fetch("http://localhost:5000/order/sandwiches/all").then(res=>res.json()).then(res => {
             this.setState({sandwiches:res});
         })
     }
@@ -179,7 +179,7 @@ class Employee extends React.Component {
     displayIngredientInformation(){
       let name = this.refs.IngredientName.value;
       console.log(name);
-      fetch("http://localhost:3000/supply/ing/" + name).then(res=>res.json()).then(res => {
+      fetch("http://localhost:5000/supply/ing/" + name).then(res=>res.json()).then(res => {
         this.setState({IngredientInfo:res, IngredientButton: true});
         console.log(res);
     }).catch(e => {
@@ -188,7 +188,7 @@ class Employee extends React.Component {
     }
 
     displayMemberInformation(){
-      fetch("http://localhost:3000/store/members").then(res=>res.json()).then(res => {
+      fetch("http://localhost:5000/store/members").then(res=>res.json()).then(res => {
         this.setState({MemberInfo:res, MemberButton: true});
         console.log(res);
     }).catch(e => {
@@ -197,7 +197,7 @@ class Employee extends React.Component {
     }
     displayMembers(){
       let snm = this.refs.SandwichName.value;
-      fetch("http://localhost:3000/store/customers/sandwich/" + snm).then(res=>res.json()).then(res => {
+      fetch("http://localhost:5000/store/customers/sandwich/" + snm).then(res=>res.json()).then(res => {
         this.setState({CustomersAndMembers:res, MemberAndCustButton: true});
         console.log(res);
     }).catch(e => {
@@ -206,7 +206,7 @@ class Employee extends React.Component {
   }
     displayMemberByID(){
       let id = this.refs.CustID.value;
-      fetch("http://localhost:3000/store/member/" + id).then(res=>res.json()).then(res => {
+      fetch("http://localhost:5000/store/member/" + id).then(res=>res.json()).then(res => {
         this.setState({AccessMemberProfile:res, MemberByIDButton: true});
         console.log(res);
     }).catch(e => {
@@ -214,7 +214,7 @@ class Employee extends React.Component {
     })
     }
     displayDistributors(){
-      fetch("http://localhost:3000/supply/distributor/all").then(res=>res.json()).then(res => {
+      fetch("http://localhost:5000/supply/distributor/all").then(res=>res.json()).then(res => {
         this.setState({DistributorTable:res, DistributorButton: true});
         console.log(res);
     }).catch(e => {
