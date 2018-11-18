@@ -3,6 +3,15 @@ var router = express.Router();
 var db = require('../db');
 
 /* GET home page. */
+router.get('/ing/:name', function(req, res, next) {
+    var id = req.params.name.trim();
+    var query = "select iName, bb_date, Calories, fid, FranchisePhone, FranchiseAddress from emplview where iName = ? ";
+    console.log(query);
+    db.query(query, id, function(err, result){
+        if(err) res.send(err);
+        res.send(result);
+})
+});
 router.get('/ingredient/:shipdate/', function(req, res, next) {
     var id = req.params.shipdate.toString();
     console.log(id);
@@ -15,8 +24,9 @@ router.get('/ingredient/:shipdate/', function(req, res, next) {
 });
 
 
+
 router.get('/distributor/all', function(req, res, next) { 
-    var query = "SELECT * from distview";
+    var query = "SELECT did, Name, Address from distview";
     db.query(query, function(err, result){
     if(err) res.send(err);
     res.send((result));
@@ -50,13 +60,15 @@ router.get('/ingredientproducer/:pid', function(req, res, next) {
 })
 });
 
-router.get('/ingredients', function(req, res, next) {
-    var id = req.params.did;
-    var query = "SELECT * from Ingredient";
+//Todo
+router.get("/customers/:sName", function(req, res, next) {
+    var sName = req.params.sName;
+    var query = "select cid, Name, Email,Phone, Points from custview"; 
     db.query(query, function(err, result){
-    if(err) res.send(err);
-    res.send((result));
-})
-});
+      if(err) res.send(err);
+      res.send((result));
+  })
+  })
+  
 
 module.exports = router;

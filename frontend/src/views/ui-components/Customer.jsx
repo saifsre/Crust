@@ -124,7 +124,7 @@ updateOrder() {
     orderId: this.state.orderId
 })
 }).then(res=>res.json()).then(res => {
-console.log(res);
+    alert("Your order has been updated!");
 })
 }
     setCrumb(b) {
@@ -148,7 +148,6 @@ console.log(res);
     }
     updateUpdate = () => {
         this.setState({update: true, msg: "updated"})
-        console.log(this.state.update)
     }
     cancelOrder = () => {
         fetch('http://localhost:3000/order/cancel/' + this.state.orderId.toString(), {

@@ -19,18 +19,17 @@ router.get("/member/:id", function(req, res, next) {
   var query = "SELECT * from Member where cid = " + "'" + id + "'";
   db.query(query, function(err, result){
     if(err) res.send(err);
-    res.send((result));
+    res.send(result[0]);
 })
 })
 
 router.get("/customers/sandwich/:sName", function(req, res, next) {
   var sName = req.params.sName;
-  var query = "SELECT customerid from `Order` where sName =" + "'" + sName + "'"; 
+  var query = "select cid, Name, Email, Phone, Points from emplview where sName like " + "'" + sName + "'"; 
   db.query(query, function(err, result){
     if(err) res.send(err);
     res.send((result));
 })
-
 })
 
 module.exports = router;

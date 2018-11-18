@@ -5,6 +5,7 @@ var db = require('../db');
 var employees = null;
 const UUID = require("uuidjs");
 
+
 //Get all the orders
 
     var query = "SELECT * from `Employee`";
